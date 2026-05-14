@@ -58,14 +58,14 @@ const Login = () => {
     <div className="login-container">
       <div className="header-banner">
         <div className="plus-icon">✚</div>
-        <h1>Nursing MCQ Platform</h1>
+        <h1> Balaji Institute Of Nurse Mcq</h1>
       </div>
 
       <div className="login-card">
         <div className="form-section">
           <h2 style={{color: '#1e3a8a', marginBottom: '5px'}}>Welcome!</h2>
           <p style={{color: '#6b7280', fontSize: '14px', marginBottom: '20px'}}>
-            Prepare for your exams with practice tests!
+            Final Annual Examination 2025–2026
           </p>
           
           <form onSubmit={handleLogin} className="login-form">
