@@ -1,0 +1,117 @@
+.auth-container {
+  min-height: 100vh;
+  background-color: #eff6ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.auth-banner {
+  width: 100%;
+  max-width: 650px;
+  background-color: #2563eb;
+  padding: 15px 20px;
+  border-radius: 15px 15px 0 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.plus-icon {
+  background-color: white;
+  color: #f97316;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 650px;
+  background-color: white;
+  border-radius: 0 0 15px 15px;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.form-content { flex: 1.2; }
+.form-title { color: #1e3a8a; margin-bottom: 5px; font-size: 24px; }
+.form-subtitle { color: #6b7280; font-size: 14px; margin-bottom: 20px; }
+
+.signup-form { display: flex; flex-direction: column; gap: 15px; }
+.signup-form h3 { color: #1d4ed8; font-size: 16px; margin-bottom: 5px; }
+
+/* Icon Alignment Logic */
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  font-size: 18px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px 15px 12px 45px; /* Icon માટે જગ્યા */
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.auth-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.auth-button {
+  background-color: #2563eb;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.auth-button:disabled { background-color: #93c5fd; }
+
+.error-text { color: #ef4444; font-size: 12px; margin: 0; }
+
+.footer-link { margin-top: 25px; text-align: center; font-size: 14px; }
+
+.image-section {
+  flex: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-section img { width: 100%; max-width: 280px; }
+
+@media (max-width: 768px) {
+  .auth-card { flex-direction: column; padding: 20px; }
+  .image-section { display: none; }
+}

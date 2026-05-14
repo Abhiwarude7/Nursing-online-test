@@ -1,0 +1,133 @@
+/* Login.css */
+
+.login-container {
+  min-height: 100vh;
+  background-color: #eff6ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+/* Header Banner */
+.header-banner {
+  width: 100%;
+  max-width: 650px;
+  background-color: #2563eb;
+  padding: 15px 20px;
+  border-radius: 15px 15px 0 0;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.plus-icon {
+  background-color: white;
+  color: #f97316;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Main Card Body */
+.login-card {
+  width: 100%;
+  max-width: 650px;
+  background-color: white;
+  border-radius: 0 0 15px 15px;
+  padding: 40px;
+  display: flex;
+  gap: 40px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.form-section {
+  flex: 1;
+  width: 100%;
+}
+
+.illustration-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.illustration-section img {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+}
+
+/* Form Elements */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  outline: none;
+  box-sizing: border-box; /* Crucial for padding */
+}
+
+.login-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.login-button {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.login-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .illustration-section {
+    display: none; /* Hide image on mobile like the screenshot */
+  }
+  
+  .header-banner, .login-card {
+    max-width: 400px;
+  }
+}

@@ -1,0 +1,245 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f1f5f9;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* =========================
+   SIDEBAR (Desktop)
+========================= */
+.sidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.sidebar-header {
+  padding: 20px;
+  display: none; /* Desktop वर गरज नाही */
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar-item {
+  padding: 16px 22px;
+  cursor: pointer;
+  color: #475569;
+  font-weight: 500;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-item:hover {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.sidebar-item.active {
+  background: #eff6ff;
+  color: #2563eb;
+  border-left: 4px solid #2563eb;
+  font-weight: bold;
+}
+
+.logout-item {
+  margin-top: auto;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* =========================
+   MAIN CONTENT & NAV
+========================= */
+.main-content {
+  flex: 1;
+  width: 100%;
+}
+
+.top-nav {
+  background: #2563eb;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hamburger-menu {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-logo {
+  background: white;
+  color: #2563eb;
+  padding: 2px 8px;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+.content-body {
+  padding: 30px;
+}
+
+.welcome-text {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #1e293b;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #1e293b;
+}
+
+/* =========================
+   CARDS GRID
+========================= */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.test-card {
+  background: white;
+  border-radius: 14px;
+  padding: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s;
+}
+
+.test-card:hover {
+  transform: translateY(-3px);
+}
+
+.test-card h3 {
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+.test-card p {
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.start-btn.submitted {
+  background: #64748b;
+  cursor: not-allowed;
+}
+
+.result-card {
+  border-top: 4px solid #22c55e;
+}
+
+.score-text {
+  color: #2563eb;
+  font-weight: bold;
+}
+
+.status-badge.active {
+  background: #dcfce7;
+  color: #166534;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE (Hammer Logic)
+========================= */
+@media (max-width: 768px) {
+  .hamburger-menu {
+    display: block;
+  }
+
+  .sidebar {
+    position: fixed;
+    left: -260px; /* Hide sidebar */
+    top: 0;
+    height: 100vh;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+  }
+
+  .sidebar.open {
+    left: 0; /* Slide in */
+  }
+
+  .sidebar-header {
+    display: flex;
+  }
+
+  .close-btn {
+    font-size: 24px;
+    cursor: pointer;
+    color: #64748b;
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 1000;
+  }
+
+  .content-body {
+    padding: 20px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .top-nav {
+    padding: 15px 20px;
+  }
+
+  .nav-brand h2 {
+    font-size: 16px;
+  }
+}
