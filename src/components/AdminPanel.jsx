@@ -12,6 +12,13 @@ const AdminPanel = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('home');
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile Menu State
+  
+    // 🔽 या ३ लाईन्स तुमच्या आधीच्या स्टेट्ससोबत (उदा. activeTab च्या खाली) जोडून घ्या 🔽
+    const [isAddingUser, setIsAddingUser] = useState(false);
+    const [newUser, setNewUser] = useState({ name: '', email: '', password: '' });
+   
+
+  
     
     // STATES ADD करा
 const [searchPaper, setSearchPaper] = useState('');
@@ -358,6 +365,62 @@ const fetchStudentUploads = async () => {
   );
 };
 
+// ➕ १. Firebase मध्ये नवीन युझर सेव्ह करण्याचे फंक्शन
+const handleCreateUser = async (e) => {
+    e.preventDefault();
+    try {
+        // Firebase च्या 'users' कलेक्शनचा रेफरन्स घ्या
+        const usersCollectionRef = collection(db, "users"); 
+
+        // Firestore मध्ये डेटा इन्सर्ट करा
+        const docRef = await addDoc(usersCollectionRef, {
+            name: newUser.name,
+            email: newUser.email,
+            password: newUser.password, // टीप: पासवर्ड सुरक्षिततेसाठी प्लेन टेक्स्ट ऐवजी Auth वापरणे चांगले
+            createdAt: new Date()
+        });
+
+        // UI लगेच अपडेट होण्यासाठी लोकल स्टेटमध्ये डेटा जोडा
+        const studentWithFirebaseId = {
+            id: docRef.id, // Firebase कडून मिळालेली युनिक ID
+            name: newUser.name,
+            email: newUser.email
+        };
+        setAllUsers([...allUsers, studentWithFirebaseId]);
+
+        // फॉर्म क्लियर आणि पॉप-अप बंद करा
+        setNewUser({ name: '', email: '', password: '' });
+        setIsAddingUser(false);
+        
+        alert("विद्यार्थ्याचा डेटा Firebase मध्ये यशस्वीरीत्या सेव्ह झाला! 🔥");
+    } catch (error) {
+        console.error("Error inserting document: ", error);
+        alert("डेटा सेव्ह करताना काहीतरी चूक झाली.");
+    }
+};
+
+// 🗑️ २. Firebase मधून युझर डिलीट करण्याचे फंक्शन
+const handleDeleteUser = async (userId, userName) => {
+    const confirmDelete = window.confirm(`तुम्हाला नक्की ${userName} चा डेटा डिलीट करायचा आहे का?`);
+    
+    if (confirmDelete) {
+        try {
+            // Firebase मधून डॉक्युमेंट डिलीट करा
+            const userDocRef = doc(db, "users", userId);
+            await deleteDoc(userDocRef);
+
+            // स्क्रीनवरून (UI) तो युझर लगेच काढून टाका
+            const updatedUsers = allUsers.filter(user => user.id !== userId);
+            setAllUsers(updatedUsers);
+
+            alert("डेटा यशस्वीरीत्या डिलीट केला! 🗑️");
+        } catch (error) {
+            console.error("Error deleting document: ", error);
+            alert("डेटा डिलीट होऊ शकला नाही.");
+        }
+    }
+};
+
     return (
         <div className="dashboard-container">
             {/* Hamburger Button for Mobile */}
@@ -640,47 +703,110 @@ const fetchStudentUploads = async () => {
                             </div>
                         </div>
                     ) : activeTab === 'users' ? (
-                        <div className="paper-list-section">
-                            <h1>Registered Students List</h1>
-                            <div className="admin-table-container">
-                                <table className="admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Student Name</th>
-                                            <th>Email</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {allUsers.map((user) => (
-                                            <tr key={user.id}>
-                                                <td><strong>{user.name || "N/A"}</strong></td>
-                                                <td>{user.email}</td>
-                                                <td>
-                                                    <button onClick={() => setEditingUser(user)}>✏️</button>
-                                                    <button onClick={() => handlePasswordReset(user.email)}>🔑 Reset</button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+        <div className="paper-list-section">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h1>Registered Students List</h1>
+                {/* Add Button */}
+                <button 
+                    onClick={() => setIsAddingUser(true)} 
+                    style={{ padding: '10px 15px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
+                >
+                    ➕ Add New Student
+                </button>
+            </div>
+
+            <div className="admin-table-container">
+                <table className="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {allUsers.map((user) => (
+                            <tr key={user.id}>
+                                <td><strong>{user.name || "N/A"}</strong></td>
+                                <td>{user.email}</td>
+                                <td>
+                                    {/* Edit Button */}
+                                    <button onClick={() => setEditingUser(user)} title="Edit" style={{ cursor: 'pointer', marginRight: '5px' }}>✏️</button>
+                                    
+                                    {/* Reset Button */}
+                                    <button onClick={() => handlePasswordReset(user.email)} title="Reset Password" style={{ cursor: 'pointer', marginRight: '5px' }}>🔑 Reset</button>
+                                    
+                                    {/* 🗑️ नवीन जोडलेले Delete बटण */}
+                                    <button 
+                                        onClick={() => handleDeleteUser(user.id, user.name)} 
+                                        style={{ backgroundColor: '#dc3545', color: 'white', border: 'none', padding: '5px 8px', borderRadius: '3px', cursor: 'pointer' }}
+                                        title="Delete Student"
+                                    >
+                                        🗑️ Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* 🌟 NEW STUDENT INSERT FORM MODAL 🌟 */}
+            {isAddingUser && (
+                <div className="modal-overlay" style={modalOverlayStyle}>
+                    <div className="result-modal" style={modalStyle}>
+                        <h3>Add New Student</h3>
+                        <form onSubmit={handleCreateUser}>
+                            <input 
+                                type="text" 
+                                placeholder="Enter Name"
+                                style={{ width: '100%', padding: '10px', marginBottom: '10px' }} 
+                                value={newUser.name} 
+                                onChange={(e) => setNewUser({ ...newUser, name: e.target.value })} 
+                                required 
+                            />
+                            <input 
+                                type="email" 
+                                placeholder="Enter Email"
+                                style={{ width: '100%', padding: '10px', marginBottom: '10px' }} 
+                                value={newUser.email} 
+                                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })} 
+                                required 
+                            />
+                            <input 
+                                type="password" 
+                                placeholder="Enter Password"
+                                style={{ width: '100%', padding: '10px', marginBottom: '10px' }} 
+                                value={newUser.password} 
+                                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })} 
+                                required 
+                            />
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <button type="submit" style={{ backgroundColor: '#28a745', color: 'white', padding: '10px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Save to Firebase</button>
+                                <button type="button" onClick={() => setIsAddingUser(false)}>Cancel</button>
                             </div>
-                            {editingUser && (
-                                <div className="modal-overlay" style={modalOverlayStyle}>
-                                    <div className="result-modal" style={modalStyle}>
-                                        <h3>Edit Profile</h3>
-                                        <form onSubmit={handleUpdateUser}>
-                                            <input type="text" style={{width:'100%', padding:'10px', marginBottom:'10px'}} value={editingUser.name} onChange={(e) => setEditingUser({...editingUser, name: e.target.value})} />
-                                            <input type="email" style={{width:'100%', padding:'10px', marginBottom:'10px'}} value={editingUser.email} onChange={(e) => setEditingUser({...editingUser, email: e.target.value})} />
-                                            <div style={{display:'flex', gap:'10px'}}>
-                                                <button type="submit" className="save-btn">Save</button>
-                                                <button type="button" onClick={() => setEditingUser(null)}>Cancel</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* EDIT PROFILE MODAL */}
+            {editingUser && (
+                <div className="modal-overlay" style={modalOverlayStyle}>
+                    <div className="result-modal" style={modalStyle}>
+                        <h3>Edit Profile</h3>
+                        <form onSubmit={handleUpdateUser}>
+                            <input type="text" style={{ width: '100%', padding: '10px', marginBottom: '10px' }} value={editingUser.name} onChange={(e) => setEditingUser({ ...editingUser, name: e.target.value })} />
+                            <input type="email" style={{ width: '100%', padding: '10px', marginBottom: '10px' }} value={editingUser.email} onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })} />
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <button type="submit" className="save-btn">Save</button>
+                                <button type="button" onClick={() => setEditingUser(null)}>Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
                     ) : activeTab === 'results' ? (
   <div className="paper-list-section">
 

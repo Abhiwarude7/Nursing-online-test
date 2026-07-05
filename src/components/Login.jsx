@@ -3,7 +3,8 @@ import './Login.css';
 import { auth, db } from '../firebase'; 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore'; 
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
+///Link,
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -102,9 +103,9 @@ const Login = () => {
             <button type="submit" className="login-button">Login</button>
           </form>
 
-          <p style={{marginTop: '25px', textAlign: 'center', fontSize: '14px', color: '#4b5563'}}>
+         {/* <p style={{marginTop: '25px', textAlign: 'center', fontSize: '14px', color: '#4b5563'}}>
             Don't have an account? <Link to="/signup" style={{color: '#2563eb', fontWeight: 'bold', textDecoration: 'none'}}>Sign Up</Link>
-          </p>
+          </p>*/}
         </div>
 
         <div className="illustration-section">
